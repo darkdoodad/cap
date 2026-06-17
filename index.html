@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light only">
+    <title>Collect All Pets! Calculator</title>
+    <link rel="icon" type="image/png" href="assets/emojis/cap.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1 class="game-title">
+            <span class="title-line">Collect</span>
+            <span class="title-line">All</span>
+            <span class="title-line">Pets!</span>
+        </h1>
+        <p class="subtitle">Calculator</p>
+    </header>
+
+    <!-- Left Sidebar Nav -->
+    <nav id="sidebar">
+        <button class="nav-btn" data-panel="shop-panel" aria-label="Shop" title="Shop"><img class="nav-emoji" src="assets/emojis/shop.png" alt=""></button>
+        <button class="nav-btn" data-panel="rune-panel" aria-label="Rune" title="Rune"><img class="nav-emoji" src="assets/emojis/rune.png" alt=""></button>
+        <button class="nav-btn" data-panel="badge-panel" aria-label="Badge" title="Badge"><img class="nav-emoji" src="assets/emojis/badge.png" alt=""></button>
+        <button class="nav-btn" data-panel="asc-panel" aria-label="Ascension" title="Ascension"><img class="nav-emoji" src="assets/emojis/ascension.png" alt=""></button>
+        <button class="nav-btn" data-panel="mine-panel" aria-label="Mine" title="Mine"><img class="nav-emoji" src="assets/emojis/mine.png" alt=""></button>
+        <button class="nav-btn" data-panel="lab-panel" aria-label="Lab" title="Lab"><img class="nav-emoji" src="assets/emojis/lab.png" alt=""></button>
+        <button class="nav-btn" data-panel="general-panel" aria-label="General" title="General"><img class="nav-emoji" src="assets/emojis/general.png" alt=""></button>
+    </nav>
+
+    <!-- Flyout overlay backdrop -->
+    <div id="flyout-backdrop"></div>
+
+    <!-- Flyout container -->
+    <div id="flyout">
+        <div id="flyout-label"></div>
+        <button id="flyout-close">X</button>
+        <div id="flyout-content"></div>
+    </div>
+
+    <main>
+        <!-- Main view tabs -->
+        <div class="tab-bar">
+            <div class="tab-row">
+                <button class="tab-btn active" data-tab="stats-tab" type="button">Stats</button>
+                <button class="tab-btn" data-tab="progress-tab" type="button">Progress</button>
+            </div>
+            <div class="tab-track"><span class="tab-fill"></span></div>
+        </div>
+
+        <!-- Stats Tab -->
+        <div id="stats-tab" class="tab-content active">
+        <!-- Stats Display Panel -->
+        <section id="stat-panel" class="panel">
+            <table class="stat-table">
+                <thead>
+                    <tr>
+                        <th class="st-icon-col"></th>
+                        <th>Stat</th>
+                        <th>Permanent</th>
+                        <th>Dynamic</th>
+                        <th>Temporary</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td class="st-icon"><img src="assets/emojis/shiny_luck.png" alt=""></td><td>Shiny Luck</td><td id="stat-shiny-perm" class="st-val">---</td><td id="stat-shiny-dyn" class="st-val">---</td><td id="stat-shiny-temp" class="st-val">---</td></tr>
+                    <tr><td class="st-icon"><img src="assets/emojis/metallic_luck.png" alt=""></td><td>Metallic Luck</td><td id="stat-metallic-perm" class="st-val">---</td><td id="stat-metallic-dyn" class="st-val">---</td><td id="stat-metallic-temp" class="st-val">---</td></tr>
+                    <tr><td class="st-icon"><img src="assets/emojis/egg_luck.png" alt=""></td><td>Egg Luck</td><td id="stat-egg-perm" class="st-val">0%</td><td id="stat-egg-dyn" class="st-val">---</td><td id="stat-egg-temp" class="st-val">---</td></tr>
+                    <tr><td class="st-icon"><img src="assets/emojis/fuse_luck.png" alt=""></td><td>Fuse Luck</td><td id="stat-fuse-perm" class="st-val">0%</td><td id="stat-fuse-dyn" class="st-val">---</td><td id="stat-fuse-temp" class="st-val">---</td></tr>
+                    <tr><td class="st-icon"><img src="assets/emojis/clone_luck.png" alt=""></td><td>Clone Luck</td><td id="stat-clone-perm" class="st-val">0%</td><td id="stat-clone-dyn" class="st-val">---</td><td id="stat-clone-temp" class="st-val">---</td></tr>
+                    <tr><td class="st-icon"><img src="assets/emojis/generation_speed.png" alt=""></td><td>Generation Speed</td><td id="stat-gen-perm" class="st-val">0.25/s</td><td id="stat-gen-dyn" class="st-val">---</td><td id="stat-gen-temp" class="st-val">---</td></tr>
+                    <tr><td class="st-icon"><img src="assets/emojis/calcify_luck.png" alt=""></td><td>Calcify Luck</td><td id="stat-calcify-perm" class="st-val">0%</td><td id="stat-calcify-dyn" class="st-val">---</td><td id="stat-calcify-temp" class="st-val">---</td></tr>
+                    <tr><td class="st-icon"><img src="assets/emojis/stones_from_mining.png" alt=""></td><td>Stones from Mining</td><td id="stat-stones-perm" class="st-val">100%</td><td id="stat-stones-dyn" class="st-val">---</td><td id="stat-stones-temp" class="st-val">---</td></tr>
+                    <tr><td class="st-icon"><img src="assets/emojis/mining_speed.png" alt=""></td><td>Mining Speed</td><td id="stat-mining-perm" class="st-val">0.50/s</td><td id="stat-mining-dyn" class="st-val">---</td><td id="stat-mining-temp" class="st-val">---</td></tr>
+                    <tr><td class="st-icon"><img src="assets/emojis/double_strike_luck.png" alt=""></td><td>Double-Strike Luck</td><td id="stat-double-perm" class="st-val">---</td><td id="stat-double-dyn" class="st-val">---</td><td id="stat-double-temp" class="st-val">---</td></tr>
+                    <tr><td class="st-icon"><img src="assets/emojis/triple_strike_luck.png" alt=""></td><td>Triple-Strike Luck</td><td id="stat-triple-perm" class="st-val">---</td><td id="stat-triple-dyn" class="st-val">---</td><td id="stat-triple-temp" class="st-val">---</td></tr>
+                    <tr><td class="st-icon"><img src="assets/emojis/quadra_strike_luck.png" alt=""></td><td>Quadra-Strike Luck</td><td id="stat-quadra-perm" class="st-val">---</td><td id="stat-quadra-dyn" class="st-val">---</td><td id="stat-quadra-temp" class="st-val">---</td></tr>
+                    <tr><td class="st-icon"><img src="assets/emojis/penta_strike_luck.png" alt=""></td><td>Penta-Strike Luck</td><td id="stat-penta-perm" class="st-val">---</td><td id="stat-penta-dyn" class="st-val">---</td><td id="stat-penta-temp" class="st-val">---</td></tr>
+                    <tr><td class="st-icon"><img src="assets/emojis/giant_luck.png" alt=""></td><td>Giant Luck</td><td id="stat-giant-perm" class="st-val">---</td><td id="stat-giant-dyn" class="st-val">---</td><td id="stat-giant-temp" class="st-val">---</td></tr>
+                    <tr><td class="st-icon"><img src="assets/emojis/shiny_giant_luck.png" alt=""></td><td>Shiny Giant Luck</td><td id="stat-shinyGiant-perm" class="st-val">---</td><td id="stat-shinyGiant-dyn" class="st-val">---</td><td id="stat-shinyGiant-temp" class="st-val">---</td></tr>
+                    <tr><td class="st-icon"><img src="assets/emojis/pet_score_luck.png" alt=""></td><td>Pet Score Luck</td><td id="stat-petScore-perm" class="st-val">0%</td><td id="stat-petScore-dyn" class="st-val">---</td><td id="stat-petScore-temp" class="st-val">---</td></tr>
+                    <tr><td class="st-icon"><img src="assets/emojis/shiny_stone_luck.png" alt=""></td><td>Shiny Stone Luck</td><td id="stat-shinyStone-perm" class="st-val">0%</td><td id="stat-shinyStone-dyn" class="st-val">---</td><td id="stat-shinyStone-temp" class="st-val">---</td></tr>
+                </tbody>
+            </table>
+        </section>
+        </div>
+
+        <!-- Progress Tab -->
+        <div id="progress-tab" class="tab-content">
+            <section id="progress-panel" class="panel">
+                <p class="progress-empty">Progress tracking coming soon.</p>
+            </section>
+        </div>
+
+        <!-- Shop Upgrades -->
+        <section id="shop-panel" class="panel flyout-section">
+            <div class="input-card">
+            <div class="input-grid">
+                <div class="input-group">
+                    <label for="shop-egg">Egg Luck</label>
+                    <input type="number" id="shop-egg" min="0" max="25" value="0" step="1">
+                    <span class="unit">/ 25%</span>
+                </div>
+                <div class="input-group">
+                    <label for="shop-fuse">Fuse Luck</label>
+                    <input type="number" id="shop-fuse" min="0" max="25" value="0" step="1">
+                    <span class="unit">/ 25%</span>
+                </div>
+                <div class="input-group">
+                    <label for="shop-clone">Clone Luck</label>
+                    <input type="number" id="shop-clone" min="0" max="5" value="0" step="0.1">
+                    <span class="unit">/ 5%</span>
+                </div>
+                <div class="input-group">
+                    <label for="shop-calcify">Calcify Luck</label>
+                    <input type="number" id="shop-calcify" min="0" max="100" value="0" step="1">
+                    <span class="unit">/ 100%</span>
+                </div>
+                <div class="input-group">
+                    <label for="shop-gen">Generation Speed</label>
+                    <input type="number" id="shop-gen" min="0.25" max="5" value="0.25" step="0.01">
+                    <span class="unit">/ 5/s</span>
+                </div>
+            </div>
+            </div>
+            <div class="input-card">
+            <div class="input-grid">
+                <div class="input-group">
+                    <label for="shop-shiny">Shiny Luck</label>
+                    <input type="number" id="shop-shiny" min="1" max="10" value="1" step="0.01">
+                    <span class="unit">/ x10</span>
+                </div>
+                <div class="input-group">
+                    <label for="shop-metallic">Metallic Luck</label>
+                    <input type="number" id="shop-metallic" min="0" max="0.002" value="0" step="0.00001">
+                    <span class="unit">/ 0.002%</span>
+                </div>
+            </div>
+            </div>
+            <div class="input-card">
+            <div class="input-grid">
+                <div class="input-group">
+                    <label for="shop-double">Double-Strike Luck</label>
+                    <input type="number" id="shop-double" min="0" max="25" value="0" step="0.25">
+                    <span class="unit">/ 25%</span>
+                </div>
+                <div class="input-group">
+                    <label for="shop-triple">Triple-Strike Luck</label>
+                    <input type="number" id="shop-triple" min="0" max="25" value="0" step="0.25">
+                    <span class="unit">/ 25%</span>
+                </div>
+                <div class="input-group">
+                    <label for="shop-quadra">Quadra-Strike Luck</label>
+                    <input type="number" id="shop-quadra" min="0" max="25" value="0" step="0.25">
+                    <span class="unit">/ 25%</span>
+                </div>
+                <div class="input-group">
+                    <label for="shop-penta">Penta-Strike Luck</label>
+                    <input type="number" id="shop-penta" min="0" max="25" value="0" step="0.25">
+                    <span class="unit">/ 25%</span>
+                </div>
+                <div class="input-group">
+                    <label for="shop-giant">Giant Luck</label>
+                    <input type="number" id="shop-giant" min="0" max="10" value="0" step="0.1">
+                    <span class="unit">/ 10%</span>
+                </div>
+                <div class="input-group">
+                    <label for="shop-mining">Mining Speed</label>
+                    <input type="number" id="shop-mining" min="0.5" max="1.5" value="0.5" step="0.01">
+                    <span class="unit">/ 1.5/s</span>
+                </div>
+                <div class="input-group">
+                    <label>Pickaxe</label>
+                    <input type="hidden" id="shop-pickaxe" value="None">
+                    <div class="seg-control seg-wrap">
+                        <button type="button" class="seg-btn pickaxe-stone" data-value="Stone">Stone</button>
+                        <button type="button" class="seg-btn pickaxe-emerald" data-value="Emerald">Emerald</button>
+                        <button type="button" class="seg-btn pickaxe-sapphire" data-value="Sapphire">Sapphire</button>
+                        <button type="button" class="seg-btn pickaxe-amethyst" data-value="Amethyst">Amethyst</button>
+                        <button type="button" class="seg-btn pickaxe-topaz" data-value="Topaz">Topaz</button>
+                        <button type="button" class="seg-btn pickaxe-quartz" data-value="Quartz">Quartz</button>
+                        <button type="button" class="seg-btn pickaxe-diamond" data-value="Diamond">Diamond</button>
+                        <button type="button" class="seg-btn pickaxe-ruby" data-value="Ruby">Ruby</button>
+                    </div>
+                </div>
+            </div>
+            </div>
+            <div class="input-card">
+            <div class="input-grid">
+                <div class="input-group">
+                    <label for="shop-shinyStone">Shiny Stone Luck</label>
+                    <input type="number" id="shop-shinyStone" min="0" max="0.1" value="0" step="0.001">
+                    <span class="unit">/ 0.1%</span>
+                </div>
+            </div>
+            </div>
+        </section>
+
+        <!-- Rune Upgrades -->
+        <section id="rune-panel" class="panel flyout-section">
+            <div class="input-card">
+            <div class="input-grid">
+                <div class="input-group">
+                    <label for="rune-egg">Egg Luck</label>
+                    <input type="number" id="rune-egg" min="0" max="10" value="0" step="0.1">
+                    <span class="unit">/ 10%</span>
+                </div>
+                <div class="input-group">
+                    <label for="rune-shiny">Shiny Luck</label>
+                    <input type="number" id="rune-shiny" min="1" max="1.2" value="1" step="0.001">
+                    <span class="unit">/ x1.2</span>
+                </div>
+                <div class="input-group">
+                    <label for="rune-metallic">Metallic Luck</label>
+                    <input type="number" id="rune-metallic" min="1" max="1.2" value="1" step="0.001">
+                    <span class="unit">/ x1.2</span>
+                </div>
+                <div class="input-group">
+                    <label for="rune-giant">Giant Luck</label>
+                    <input type="number" id="rune-giant" min="1" max="1.2" value="1" step="0.001">
+                    <span class="unit">/ x1.2</span>
+                </div>
+            </div>
+            </div>
+        </section>
+
+        <!-- Badge Upgrades -->
+        <section id="badge-panel" class="panel flyout-section">
+            <div class="input-card">
+            <div class="input-grid">
+                <div class="input-group">
+                    <label for="badge-egg">Egg Luck</label>
+                    <input type="number" id="badge-egg" min="0" max="10" value="0" step="1">
+                    <span class="unit">/ 10%</span>
+                </div>
+                <div class="input-group">
+                    <label for="badge-shiny">Shiny Luck</label>
+                    <input type="number" id="badge-shiny" min="1" max="1.1" value="1" step="0.01">
+                    <span class="unit">/ x1.1</span>
+                </div>
+                <div class="input-group">
+                    <label for="badge-metallic">Metallic Luck</label>
+                    <input type="number" id="badge-metallic" min="1" max="2" value="1" step="0.1">
+                    <span class="unit">/ x2</span>
+                </div>
+                <div class="input-group">
+                    <label for="badge-giant">Giant Luck</label>
+                    <input type="number" id="badge-giant" min="1" max="1.1" value="1" step="0.01">
+                    <span class="unit">/ x1.1</span>
+                </div>
+                <div class="input-group">
+                    <label for="badge-shinyGiant">Shiny Giant</label>
+                    <input type="number" id="badge-shinyGiant" min="1" max="1.1" value="1" step="0.01">
+                    <span class="unit">/ x1.1</span>
+                </div>
+                <div class="input-group">
+                    <label for="badge-petScore">Pet Score Luck</label>
+                    <input type="number" id="badge-petScore" min="0" max="50" value="0" step="5">
+                    <span class="unit">/ 50%</span>
+                </div>
+            </div>
+            </div>
+        </section>
+
+        <!-- Ascension Upgrades -->
+        <section id="asc-panel" class="panel flyout-section">
+            <div class="input-card">
+            <div class="input-grid">
+                <div class="input-group">
+                    <label for="asc-shiny">Shiny Luck</label>
+                    <input type="number" id="asc-shiny" min="1" step="0.1" value="1">
+                    <span class="unit">x multiplier</span>
+                </div>
+                <div class="input-group">
+                    <label for="asc-metallic">Metallic Luck</label>
+                    <input type="number" id="asc-metallic" min="1" step="0.1" value="1">
+                    <span class="unit">x multiplier</span>
+                </div>
+                <div class="input-group">
+                    <label for="asc-giant">Giant Luck</label>
+                    <input type="number" id="asc-giant" min="1" step="0.1" value="1">
+                    <span class="unit">x multiplier</span>
+                </div>
+                <div class="input-group">
+                    <label for="asc-shinyStone">Shiny Stone Luck</label>
+                    <input type="number" id="asc-shinyStone" min="1" step="0.1" value="1">
+                    <span class="unit">x multiplier</span>
+                </div>
+                <div class="input-group">
+                    <label for="asc-petScore">Pet Score Luck</label>
+                    <input type="number" id="asc-petScore" min="1" step="0.1" value="1">
+                    <span class="unit">x multiplier</span>
+                </div>
+            </div>
+            </div>
+            <div class="input-card">
+            <div class="input-grid">
+                <div class="input-group">
+                    <label>Egg Luck</label>
+                    <input type="hidden" id="exotic-egg" value="None">
+                    <div class="seg-control">
+                        <button type="button" class="seg-btn" data-value="0.15">+15%</button>
+                        <button type="button" class="seg-btn" data-value="0.20">+20%</button>
+                        <button type="button" class="seg-btn" data-value="0.25">+25%</button>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Clone Luck</label>
+                    <input type="hidden" id="exotic-clone" value="None">
+                    <div class="seg-control">
+                        <button type="button" class="seg-btn" data-value="0.025">+2.5%</button>
+                        <button type="button" class="seg-btn" data-value="0.05">+5%</button>
+                        <button type="button" class="seg-btn" data-value="0.075">+7.5%</button>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Generation Speed</label>
+                    <input type="hidden" id="exotic-gen" value="None">
+                    <div class="seg-control">
+                        <button type="button" class="seg-btn" data-value="0.5">+0.5/s</button>
+                        <button type="button" class="seg-btn" data-value="1.0">+1/s</button>
+                        <button type="button" class="seg-btn" data-value="1.5">+1.5/s</button>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Calcify Luck</label>
+                    <input type="hidden" id="exotic-calcify" value="None">
+                    <div class="seg-control">
+                        <button type="button" class="seg-btn" data-value="0.20">+20%</button>
+                        <button type="button" class="seg-btn" data-value="0.30">+30%</button>
+                        <button type="button" class="seg-btn" data-value="0.40">+40%</button>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Mining Speed</label>
+                    <input type="hidden" id="exotic-mining" value="None">
+                    <div class="seg-control">
+                        <button type="button" class="seg-btn" data-value="0.20">+0.2/s</button>
+                        <button type="button" class="seg-btn" data-value="0.35">+0.35/s</button>
+                        <button type="button" class="seg-btn" data-value="0.50">+0.5/s</button>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Double-Strike Luck</label>
+                    <input type="hidden" id="exotic-double" value="None">
+                    <div class="seg-control">
+                        <button type="button" class="seg-btn" data-value="0.05">+5%</button>
+                        <button type="button" class="seg-btn" data-value="0.10">+10%</button>
+                        <button type="button" class="seg-btn" data-value="0.15">+15%</button>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </section>
+
+        <!-- Mine Upgrades -->
+        <section id="mine-panel" class="panel flyout-section">
+            <div class="input-card">
+                <div class="input-grid">
+                    <div class="input-group">
+                        <label for="oc-stones">Stones from Mining</label>
+                        <label class="toggle"><input type="checkbox" id="oc-stones"><span class="toggle-slider"></span></label>
+                        <span class="unit">x2</span>
+                    </div>
+                    <div class="input-group">
+                        <label for="oc-double">Double-Strike Luck</label>
+                        <label class="toggle"><input type="checkbox" id="oc-double"><span class="toggle-slider"></span></label>
+                        <span class="unit">x1.4</span>
+                    </div>
+                    <div class="input-group">
+                        <label for="oc-triple">Triple-Strike Luck</label>
+                        <label class="toggle"><input type="checkbox" id="oc-triple"><span class="toggle-slider"></span></label>
+                        <span class="unit">x1.6</span>
+                    </div>
+                    <div class="input-group">
+                        <label for="oc-quadra">Quadra-Strike Luck</label>
+                        <label class="toggle"><input type="checkbox" id="oc-quadra"><span class="toggle-slider"></span></label>
+                        <span class="unit">x1.8</span>
+                    </div>
+                    <div class="input-group">
+                        <label for="oc-penta">Penta-Strike Luck</label>
+                        <label class="toggle"><input type="checkbox" id="oc-penta"><span class="toggle-slider"></span></label>
+                        <span class="unit">x2</span>
+                    </div>
+                    <div class="input-group">
+                        <label for="oc-giant">Giant Luck</label>
+                        <label class="toggle"><input type="checkbox" id="oc-giant"><span class="toggle-slider"></span></label>
+                        <span class="unit">x1.5</span>
+                    </div>
+                    <div class="input-group">
+                        <label for="oc-shinyGiant">Shiny Giant Luck</label>
+                        <label class="toggle"><input type="checkbox" id="oc-shinyGiant"><span class="toggle-slider"></span></label>
+                        <span class="unit">x1.5</span>
+                    </div>
+                </div>
+            </div>
+            <div class="input-card">
+                <div class="input-grid">
+                    <div class="input-group">
+                        <label for="ingot-stones">Stones from Mining</label>
+                        <label class="toggle"><input type="checkbox" id="ingot-stones"><span class="toggle-slider"></span></label>
+                        <span class="unit">+100%</span>
+                    </div>
+                    <div class="input-group">
+                        <label for="ingot-double">Double-Strike Luck</label>
+                        <label class="toggle"><input type="checkbox" id="ingot-double"><span class="toggle-slider"></span></label>
+                        <span class="unit">+20%</span>
+                    </div>
+                    <div class="input-group">
+                        <label for="ingot-triple">Triple-Strike Luck</label>
+                        <label class="toggle"><input type="checkbox" id="ingot-triple"><span class="toggle-slider"></span></label>
+                        <span class="unit">+30%</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Lab Upgrades -->
+        <section id="lab-panel" class="panel flyout-section">
+
+            <div class="lab-profiles">
+                <div class="lab-profile-tabs" id="lab-profile-tabs">
+                    <button type="button" class="lab-profile-tab">1</button>
+                    <button type="button" class="lab-profile-tab">2</button>
+                    <button type="button" class="lab-profile-tab">3</button>
+                    <button type="button" class="lab-profile-tab">4</button>
+                    <button type="button" class="lab-profile-tab">5</button>
+                    <button type="button" class="lab-profile-tab">6</button>
+                    <button type="button" class="lab-profile-tab">7</button>
+                    <button type="button" class="lab-profile-tab">8</button>
+                </div>
+                <div class="lab-profile-actions">
+                    <button type="button" id="lab-profile-activate" class="lab-profile-action activate">Active</button>
+                    <button type="button" id="lab-profile-reset" class="lab-profile-action reset">Reset</button>
+                </div>
+            </div>
+
+            <div class="lab-tiers">
+                <div class="lab-tier" data-tier-color="8">
+                    <div class="lab-tier-label"><span class="tier-num">VIII</span></div>
+                    <div class="lab-cards">
+                        <div class="lab-card" data-stat="Metallic"><span class="card-name"><img src="assets/emojis/metallic_luck.png" alt="Metallic"></span><input type="number" id="lab-8-metallic" min="0" max="20" value="0" step="1"><span class="unit">/ 20</span></div>
+                        <div class="lab-card" data-stat="Shiny"><span class="card-name"><img src="assets/emojis/shiny_luck.png" alt="Shiny"></span><input type="number" id="lab-8-shiny" min="0" max="20" value="0" step="1"><span class="unit">/ 20</span></div>
+                        <div class="lab-card" data-stat="Stones"><span class="card-name"><img src="assets/emojis/stones_from_mining.png" alt="Stones"></span><input type="number" id="lab-8-stones" min="0" max="20" value="0" step="1"><span class="unit">/ 20</span></div>
+                        <div class="lab-card" data-stat="Double"><span class="card-name"><img src="assets/emojis/double_strike_luck.png" alt="Double"></span><input type="number" id="lab-8-double" min="0" max="10" value="0" step="1"><span class="unit">/ 10</span></div>
+                        <div class="lab-card" data-stat="Mining"><span class="card-name"><img src="assets/emojis/mining_speed.png" alt="Mining"></span><input type="number" id="lab-8-mining" min="0" max="25" value="0" step="1"><span class="unit">/ 25</span></div>
+                        <div class="lab-card" data-stat="Giant"><span class="card-name"><img src="assets/emojis/giant_luck.png" alt="Giant"></span><input type="number" id="lab-8-giant" min="0" max="20" value="0" step="1"><span class="unit">/ 20</span></div>
+                        <div class="lab-card empty"></div>
+                    </div>
+                </div>
+                <div class="lab-tier" data-tier-color="7">
+                    <div class="lab-tier-label"><span class="tier-num">VII</span><span class="tier-pts" data-max="20">0 / 20</span></div>
+                    <div class="lab-cards">
+                        <div class="lab-card empty"></div>
+                        <div class="lab-card" data-stat="Egg"><span class="card-name"><img src="assets/emojis/egg_luck.png" alt="Egg"></span><input type="number" id="lab-7-egg" min="0" max="10" value="0" step="1"><span class="unit">/ 10</span></div>
+                        <div class="lab-card" data-stat="Stones"><span class="card-name"><img src="assets/emojis/stones_from_mining.png" alt="Stones"></span><input type="number" id="lab-7-stones" min="0" max="10" value="0" step="1"><span class="unit">/ 10</span></div>
+                        <div class="lab-card" data-stat="Double"><span class="card-name"><img src="assets/emojis/double_strike_luck.png" alt="Double"></span><input type="number" id="lab-7-double" min="0" max="10" value="0" step="1"><span class="unit">/ 10</span></div>
+                        <div class="lab-card empty"></div>
+                        <div class="lab-card" data-stat="Giant"><span class="card-name"><img src="assets/emojis/giant_luck.png" alt="Giant"></span><input type="number" id="lab-7-giant" min="0" max="10" value="0" step="1"><span class="unit">/ 10</span></div>
+                        <div class="lab-card" data-stat="Clone"><span class="card-name"><img src="assets/emojis/clone_luck.png" alt="Clone"></span><input type="number" id="lab-7-clone" min="0" max="5" value="0" step="1"><span class="unit">/ 5</span></div>
+                    </div>
+                </div>
+                <div class="lab-tier" data-tier-color="6">
+                    <div class="lab-tier-label"><span class="tier-num">VI</span><span class="tier-pts" data-max="15">0 / 15</span></div>
+                    <div class="lab-cards">
+                        <div class="lab-card" data-stat="Metallic"><span class="card-name"><img src="assets/emojis/metallic_luck.png" alt="Metallic"></span><input type="number" id="lab-6-metallic" min="0" max="10" value="0" step="1"><span class="unit">/ 10</span></div>
+                        <div class="lab-card" data-stat="Egg"><span class="card-name"><img src="assets/emojis/egg_luck.png" alt="Egg"></span><input type="number" id="lab-6-egg" min="0" max="10" value="0" step="1"><span class="unit">/ 10</span></div>
+                        <div class="lab-card" data-stat="Stones"><span class="card-name"><img src="assets/emojis/stones_from_mining.png" alt="Stones"></span><input type="number" id="lab-6-stones" min="0" max="10" value="0" step="1"><span class="unit">/ 10</span></div>
+                        <div class="lab-card" data-stat="Double"><span class="card-name"><img src="assets/emojis/double_strike_luck.png" alt="Double"></span><input type="number" id="lab-6-double" min="0" max="15" value="0" step="1"><span class="unit">/ 15</span></div>
+                        <div class="lab-card empty"></div>
+                        <div class="lab-card" data-stat="Calcify"><span class="card-name"><img src="assets/emojis/calcify_luck.png" alt="Calcify"></span><input type="number" id="lab-6-calcify" min="0" max="10" value="0" step="1"><span class="unit">/ 10</span></div>
+                        <div class="lab-card empty"></div>
+                    </div>
+                </div>
+                <div class="lab-tier" data-tier-color="5">
+                    <div class="lab-tier-label"><span class="tier-num">V</span><span class="tier-pts" data-max="15">0 / 15</span></div>
+                    <div class="lab-cards">
+                        <div class="lab-card empty"></div>
+                        <div class="lab-card" data-stat="Shiny"><span class="card-name"><img src="assets/emojis/shiny_luck.png" alt="Shiny"></span><input type="number" id="lab-5-shiny" min="0" max="10" value="0" step="1"><span class="unit">/ 10</span></div>
+                        <div class="lab-card empty"></div>
+                        <div class="lab-card empty"></div>
+                        <div class="lab-card empty"></div>
+                        <div class="lab-card" data-stat="Calcify"><span class="card-name"><img src="assets/emojis/calcify_luck.png" alt="Calcify"></span><input type="number" id="lab-5-calcify" min="0" max="10" value="0" step="1"><span class="unit">/ 10</span></div>
+                        <div class="lab-card" data-stat="Clone"><span class="card-name"><img src="assets/emojis/clone_luck.png" alt="Clone"></span><input type="number" id="lab-5-clone" min="0" max="5" value="0" step="1"><span class="unit">/ 5</span></div>
+                    </div>
+                </div>
+                <div class="lab-tier" data-tier-color="4">
+                    <div class="lab-tier-label"><span class="tier-num">IV</span><span class="tier-pts" data-max="15">0 / 15</span></div>
+                    <div class="lab-cards">
+                        <div class="lab-card" data-stat="Metallic"><span class="card-name"><img src="assets/emojis/metallic_luck.png" alt="Metallic"></span><input type="number" id="lab-4-metallic" min="0" max="10" value="0" step="1"><span class="unit">/ 10</span></div>
+                        <div class="lab-card" data-stat="Egg"><span class="card-name"><img src="assets/emojis/egg_luck.png" alt="Egg"></span><input type="number" id="lab-4-egg" min="0" max="10" value="0" step="1"><span class="unit">/ 10</span></div>
+                        <div class="lab-card" data-stat="Fuse"><span class="card-name"><img src="assets/emojis/fuse_luck.png" alt="Fuse"></span><input type="number" id="lab-4-fuse" min="0" max="10" value="0" step="1"><span class="unit">/ 10</span></div>
+                        <div class="lab-card empty"></div>
+                        <div class="lab-card empty"></div>
+                        <div class="lab-card" data-stat="Calcify"><span class="card-name"><img src="assets/emojis/calcify_luck.png" alt="Calcify"></span><input type="number" id="lab-4-calcify" min="0" max="10" value="0" step="1"><span class="unit">/ 10</span></div>
+                        <div class="lab-card empty"></div>
+                    </div>
+                </div>
+                <div class="lab-tier" data-tier-color="3">
+                    <div class="lab-tier-label"><span class="tier-num">III</span><span class="tier-pts" data-max="10">0 / 10</span></div>
+                    <div class="lab-cards">
+                        <div class="lab-card empty"></div>
+                        <div class="lab-card empty"></div>
+                        <div class="lab-card" data-stat="Fuse"><span class="card-name"><img src="assets/emojis/fuse_luck.png" alt="Fuse"></span><input type="number" id="lab-3-fuse" min="0" max="5" value="0" step="1"><span class="unit">/ 5</span></div>
+                        <div class="lab-card empty"></div>
+                        <div class="lab-card empty"></div>
+                        <div class="lab-card empty"></div>
+                        <div class="lab-card" data-stat="Clone"><span class="card-name"><img src="assets/emojis/clone_luck.png" alt="Clone"></span><input type="number" id="lab-3-clone" min="0" max="5" value="0" step="1"><span class="unit">/ 5</span></div>
+                    </div>
+                </div>
+                <div class="lab-tier" data-tier-color="2">
+                    <div class="lab-tier-label"><span class="tier-num">II</span><span class="tier-pts" data-max="10">0 / 10</span></div>
+                    <div class="lab-cards">
+                        <div class="lab-card" data-stat="Shiny"><span class="card-name"><img src="assets/emojis/shiny_luck.png" alt="Shiny"></span><input type="number" id="lab-2-shiny" min="0" max="5" value="0" step="1"><span class="unit">/ 5</span></div>
+                        <div class="lab-card empty"></div>
+                        <div class="lab-card empty"></div>
+                        <div class="lab-card empty"></div>
+                        <div class="lab-card empty"></div>
+                        <div class="lab-card empty"></div>
+                        <div class="lab-card empty"></div>
+                    </div>
+                </div>
+                <div class="lab-tier" data-tier-color="1">
+                    <div class="lab-tier-label"><span class="tier-num">I</span><span class="tier-pts" data-max="10">0 / 10</span></div>
+                    <div class="lab-cards">
+                        <div class="lab-card empty"></div>
+                        <div class="lab-card empty"></div>
+                        <div class="lab-card empty"></div>
+                        <div class="lab-card empty"></div>
+                        <div class="lab-card empty"></div>
+                        <div class="lab-card empty"></div>
+                        <div class="lab-card" data-stat="Clone"><span class="card-name"><img src="assets/emojis/clone_luck.png" alt="Clone"></span><input type="number" id="lab-1-clone" min="0" max="5" value="0" step="1"><span class="unit">/ 5</span></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- General Settings -->
+        <section id="general-panel" class="panel flyout-section">
+            <div class="input-card">
+            <div class="input-grid">
+                <div class="input-group">
+                    <label>Action</label>
+                    <input type="hidden" id="action" value="None">
+                    <div class="seg-control">
+                        <button type="button" class="seg-btn" data-value="Hatch">Hatch</button>
+                        <button type="button" class="seg-btn" data-value="Crank">Crank</button>
+                        <button type="button" class="seg-btn" data-value="Mine">Mine</button>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label for="hatchRarity">Hatch Rarity</label>
+                    <select id="hatchRarity">
+                        <option value="Common">Common</option>
+                        <option value="Uncommon">Uncommon</option>
+                        <option value="Rare">Rare</option>
+                        <option value="Epic">Epic</option>
+                        <option value="Legendary">Legendary</option>
+                        <option value="Prodigious">Prodigious</option>
+                        <option value="Ascended">Ascended</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label for="genRarity">Generation Rarity</label>
+                    <select id="genRarity">
+                        <option value="Common">Common</option>
+                        <option value="Uncommon">Uncommon</option>
+                        <option value="Rare">Rare</option>
+                        <option value="Epic">Epic</option>
+                        <option value="Legendary">Legendary</option>
+                        <option value="Prodigious">Prodigious</option>
+                        <option value="Ascended">Ascended</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label for="miningRarity">Mining Rarity</label>
+                    <select id="miningRarity">
+                        <option value="Common">Common</option>
+                        <option value="Uncommon">Uncommon</option>
+                        <option value="Rare">Rare</option>
+                        <option value="Epic">Epic</option>
+                        <option value="Legendary">Legendary</option>
+                        <option value="Prodigious">Prodigious</option>
+                        <option value="Ascended">Ascended</option>
+                        <option value="Mythical">Mythical</option>
+                    </select>
+                </div>
+            </div>
+            </div>
+            <div class="input-card">
+            <div class="input-grid">
+                <div class="input-group">
+                    <label for="expertLuck">Expert Luck</label>
+                    <label class="toggle"><input type="checkbox" id="expertLuck"><span class="toggle-slider"></span></label>
+                </div>
+                <div class="input-group">
+                    <label for="petScore">Pet Score</label>
+                    <input type="number" id="petScore" min="0" value="0" step="1" class="full-width">
+                </div>
+                <div class="input-group">
+                    <label for="prismaticLuck">Prismatic Luck</label>
+                    <label class="toggle"><input type="checkbox" id="prismaticLuck"><span class="toggle-slider"></span></label>
+                </div>
+                <div class="input-group">
+                    <label for="giantScore">Giant Score</label>
+                    <input type="number" id="giantScore" min="0" value="0" step="1" class="full-width">
+                </div>
+            </div>
+            </div>
+            <div class="input-card">
+            <div class="input-grid">
+                <div class="input-group">
+                    <label for="eggLuck">Egg Luck</label>
+                    <label class="toggle"><input type="checkbox" id="eggLuck" checked><span class="toggle-slider"></span></label>
+                    <span class="unit">Enable</span>
+                </div>
+                <div class="input-group">
+                    <label for="fuseLuck">Fuse Luck</label>
+                    <label class="toggle"><input type="checkbox" id="fuseLuck" checked><span class="toggle-slider"></span></label>
+                    <span class="unit">Enable</span>
+                </div>
+            </div>
+            </div>
+            <div class="input-card">
+            <div class="input-grid">
+                <div class="input-group">
+                    <label for="shinyLuck">Shiny Luck</label>
+                    <label class="toggle"><input type="checkbox" id="shinyLuck"><span class="toggle-slider"></span></label>
+                    <span class="unit">x2</span>
+                </div>
+                <div class="input-group">
+                    <label for="metallicLuck">Metallic Luck</label>
+                    <label class="toggle"><input type="checkbox" id="metallicLuck"><span class="toggle-slider"></span></label>
+                    <span class="unit">x2</span>
+                </div>
+            </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>Fan-made calculator for the CAP! community. All game names, images, and assets belong to their respective owners.</p>
+    </footer>
+
+    <script src="calc.js"></script>
+</body>
+</html>
